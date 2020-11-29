@@ -1,95 +1,58 @@
 #
-# Generated Makefile - do not edit!
+# This is an example Makefile for a countwords program.  This
+# program uses both the scanner module and a counter module.
+# Typing 'make' or 'make count' will create the executable file.
 #
-# Edit the Makefile in the project folder instead (../Makefile). Each target
-# has a -pre and a -post target defined where you can add customized code.
+
+# define some Makefile variables for the compiler and compiler flags
+# to use Makefile variables later in the Makefile: $()
 #
-# This makefile implements configuration specific macros and targets.
+#  -g    adds debugging information to the executable file
+#  -Wall turns on most, but not all, compiler warnings
+#
+# for C++ define  CC = g++
+CC = g++
+CFLAGS  = -g -Wall
 
+# typing 'make' will invoke the first target entry in the file 
+# (in this case the default target entry)
+# you can name this target entry anything, but "default" or "all"
+# are the most commonly used names by convention
+#
+default: MessageProcessor
 
-# Environment
-MKDIR=mkdir
-CP=cp
-GREP=grep
-NM=nm
-CCADMIN=CCadmin
-RANLIB=ranlib
-CC=gcc
-CCC=g++
-CXX=g++
-FC=gfortran
-AS=as
+# To create the executable file count we need the object files
+# main.o, MessageGetter.o, and Test.o:
+#
+MessageProcessor:  main.o MessageGetter.o Test.o 
+	$(CC) $(CFLAGS) -o MessageProcessor main.o MessageGetter.o Test.o
 
-# Macros
-CND_PLATFORM=GNU-Linux
-CND_DLIB_EXT=so
-CND_CONF=Release
-CND_DISTDIR=dist
-CND_BUILDDIR=build
+# To create the object file main.o, we need the source
+# files main.c, Structure.h, and MessageGetter.h:
+#
+main.o:  main.c Structure.h MessageGetter.h Test.h
+	$(CC) $(CFLAGS) -c main.c
 
-# Include project Makefile
-include Makefile
+# To create the object file Test.o, we need the source files
+# Test.c and Test.h:
+#
+Test.o:  Test.c Test.h 
+	$(CC) $(CFLAGS) -c Test.c
 
-# Object Directory
-OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
+# To create the object file MessageGetter.o, we need the source files
+# MessageGetter.c and MessageGetter.h:
+#
+MessageGetter.o:  MessageGetter.c MessageGetter.h 
+	$(CC) $(CFLAGS) -c MessageGetter.c
 
-# Object Files
-OBJECTFILES= \
-	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/MessageGetter.o \
-	${OBJECTDIR}/Test.o
+# define any libraries to link into executable:
+#   if I want to link in libraries (libx.so or libx.a) I use the -llibname 
+#   option, something like (this will link in libmylib.so and libm.so:
+LIBS = -lpthread -lm
 
-
-# C Compiler Flags
-CFLAGS=
-
-# CC Compiler Flags
-CCFLAGS=-m64 -finline-functions -ffast-math -fomit-frame-pointer -m64 -Ofast -flto -march=native -funroll-loops
-CXXFLAGS=-m64 -finline-functions -ffast-math -fomit-frame-pointer -m64 -Ofast -flto -march=native -funroll-loops
-
-# Fortran Compiler Flags
-FFLAGS=
-
-# Assembler Flags
-ASFLAGS=
-
-# Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/local/lib -lpthread -lrt
-
-# Build Targets
-.build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/MessageProcessor
-
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/MessageProcessor: ${OBJECTFILES}
-	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/MessageProcessor ${OBJECTFILES} ${LDLIBSOPTIONS} -finline-functions -ffast-math -march=core2 -fomit-frame-pointer
-
-${OBJECTDIR}/main.o: main.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -w -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
-	
-${OBJECTDIR}/MessageGetter.o: MessageGetter.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -w -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/MessageGetter.o MessageGetter.cpp
-
-${OBJECTDIR}/Test.o: Test.cpp
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -w -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Test.o Test.cpp
-
-# Subprojects
-.build-subprojects:
-
-# Clean Targets
-.clean-conf: ${CLEAN_SUBPROJECTS}
-	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-
-# Subprojects
-.clean-subprojects:
-
-# Enable dependency checking
-.dep.inc: .depcheck-impl
-
-include .dep.inc
+# To start over from scratch, type 'make clean'.  This
+# removes the executable file, as well as old .o object
+# files and *~ backup files:
+#
+clean: 
+	$(RM) MessageProcessor *.o *~
